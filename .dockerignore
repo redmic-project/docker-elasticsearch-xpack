@@ -1,0 +1,4 @@
+*
+!config/**/*
+!docker-healthcheck
+!elastic-entrypoint.sh
