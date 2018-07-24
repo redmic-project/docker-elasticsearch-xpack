@@ -8,7 +8,10 @@ RUN set -x \
 	&& wget -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$(dpkg --print-architecture)" \
 	&& wget -O /usr/local/bin/gosu.asc "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$(dpkg --print-architecture).asc" \
 	&& export GNUPGHOME="$(mktemp -d)" \
-	&& gpg --keyserver ha.pool.sks-keyservers.net --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4 \
+	&& key='B42F6819007F00F88E364FD4036A9C25BF357DD4' \
+	&& gpg --keyserver pgp.mit.edu --recv-keys "$key" || \
+		gpg --keyserver keyserver.pgp.com --recv-keys "$key" || \
+		gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$key" \
 	&& gpg --batch --verify /usr/local/bin/gosu.asc /usr/local/bin/gosu \
 	&& rm -rf "$GNUPGHOME" /usr/local/bin/gosu.asc \
 	&& chmod +x /usr/local/bin/gosu \
@@ -19,8 +22,8 @@ RUN set -ex; \
 	key='46095ACC8548582C1A2699A9D27D666CD88E42B4'; \
 	export GNUPGHOME="$(mktemp -d)"; \
 	gpg --keyserver pgp.mit.edu --recv-keys "$key" || \
-	gpg --keyserver keyserver.pgp.com --recv-keys "$key" || \
-	gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$key"; \
+		gpg --keyserver keyserver.pgp.com --recv-keys "$key" || \
+		gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$key"; \
 	gpg --export "$key" > /etc/apt/trusted.gpg.d/elastic.gpg; \
 	rm -rf "$GNUPGHOME"; \
 	apt-key list
