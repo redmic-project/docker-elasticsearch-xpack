@@ -65,8 +65,6 @@ COPY config/logrotate /etc/logrotate.d/elasticsearch
 COPY elastic-entrypoint.sh /
 COPY docker-healthcheck /usr/local/bin/
 
-VOLUME ["/usr/share/elasticsearch/data"]
-
 EXPOSE 9200 9300
 ENTRYPOINT ["/elastic-entrypoint.sh"]
 CMD ["elasticsearch"]
